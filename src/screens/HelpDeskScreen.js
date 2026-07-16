@@ -1,28 +1,27 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
-// 1. Import the Hook to dynamically fetch physical boundary metrics
+import { Text, View, TouchableOpacity, ScrollView, StatusBar, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function HelpDeskScreen({ onGoBack }) {
-  // 2. Extract safe area inset values
   const insets = useSafeAreaInsets();
+
+  // Dynamically calculate status bar height for iOS & Android
+  const statusBarHeight = Platform.OS === 'android' 
+    ? (StatusBar.currentHeight || 0) 
+    : insets.top;
 
   return (
     <View 
       className="flex-1 bg-blue-50/50"
-      style={{ paddingBottom: insets.bottom }} // Prevents bottom indicator overlapping on modern iPhones/Androids
+      style={{ paddingBottom: insets.bottom }}
     >
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
       
-      {/* 
-        3. Apply dynamic top padding to the colored Header.
-        This lets the dark blue stretch to the very top edge of the physical display,
-        while safely shifting the content down by the height of the dynamic notch.
-      */}
+      {/* Header with adjusted spacing below the status bar */}
       <View 
         className="bg-blue-900 pb-5 px-4 flex-row items-center shadow-md"
-        style={{ paddingTop: Math.max(insets.top, 16) }} // Uses safe area inset or a minimum of 16dp
+        style={{ paddingTop: statusBarHeight + 12 }} 
       >
         <TouchableOpacity onPress={onGoBack} className="p-1">
           <MaterialCommunityIcons name="arrow-left" size={24} color="white" />
@@ -33,7 +32,6 @@ export default function HelpDeskScreen({ onGoBack }) {
       </View>
 
       <ScrollView className="flex-1 px-4 py-6" showsVerticalScrollIndicator={false}>
-        
         <View className="items-center mb-6">
           <Text className="text-xl font-black text-blue-950">Barangay Health Center</Text>
           <Text className="text-blue-600 font-semibold mt-1 text-sm tracking-wide">Show Medical Schedule</Text>
@@ -41,7 +39,6 @@ export default function HelpDeskScreen({ onGoBack }) {
 
         {/* Schedule Cards */}
         <View className="bg-white rounded-3xl shadow-sm border border-blue-100/50 overflow-hidden mb-8">
-          
           {/* Monday */}
           <View className="flex-row items-start p-5 border-b border-blue-50">
             <View className="bg-blue-50 p-2.5 rounded-xl mr-4 mt-0.5">
@@ -106,7 +103,6 @@ export default function HelpDeskScreen({ onGoBack }) {
               <Text className="text-blue-900 font-bold text-xs mt-2.5">Attended by: Nurse Coordinator</Text>
             </View>
           </View>
-
         </View>
       </ScrollView>
     </View>

@@ -1,32 +1,27 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, ScrollView, StatusBar, Modal, Alert, Keyboard } from 'react-native';
-// 1. Import hook to safely fetch device physical boundaries
+import { Text, View, TextInput, TouchableOpacity, ScrollView, StatusBar, Modal, Alert, Keyboard, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MOCK_PATIENTS } from '../constants/mockPatients';
 import { CLINIC_SERVICES } from '../constants/clinicServices';
 
 export default function BookingScreen({ onGoBack }) {
-  // Fetch boundary space values dynamically (safe area pad sizing)
   const insets = useSafeAreaInsets();
+  const statusBarHeight = Platform.OS === 'android' 
+    ? (StatusBar.currentHeight || 0) 
+    : insets.top;
 
   const [selectedService, setSelectedService] = useState(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null); // Time Slot State
+  const [selectedTime, setSelectedTime] = useState(null);
   
-  // Real Today anchor: July 16, 2026
   const TODAY = new Date(2026, 6, 16); 
 
-  // Dynamic calendar viewport state
   const [currentYear, setCurrentYear] = useState(2026);
-  const [currentMonth, setCurrentMonth] = useState(6); // 6 is July (0-indexed)
-
-  // Step 2 Verification State
+  const [currentMonth, setCurrentMonth] = useState(6); 
   const [step, setStep] = useState('calendar'); 
   const [patientIdInput, setPatientIdInput] = useState('');
-
-  // Fast Navigation Picker State
   const [showFastPicker, setShowFastPicker] = useState(false);
 
   const monthsList = [
@@ -34,19 +29,16 @@ export default function BookingScreen({ onGoBack }) {
     "July", "August", "September", "October", "November", "December"
   ];
   const daysOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-  const availableYears = [2026, 2027, 2028]; // Multi-year range support
+  const availableYears = [2026, 2027, 2028];
 
-  // Generate dynamic grid array for selected Month / Year viewport
   const generateMonthDays = (year, month) => {
     const firstDayIndex = new Date(year, month, 1).getDay();
     const totalDays = new Date(year, month + 1, 0).getDate();
     
     const daysArray = [];
-    // Pad preceding empty spots
     for (let i = 0; i < firstDayIndex; i++) {
       daysArray.push({ day: null });
     }
-    // Populate actual month days
     for (let dayNum = 1; dayNum <= totalDays; dayNum++) {
       const weekday = (firstDayIndex + dayNum - 1) % 7;
       daysArray.push({ day: dayNum, weekday });
@@ -79,7 +71,6 @@ export default function BookingScreen({ onGoBack }) {
     setSelectedTime(null);
     setPatientIdInput('');
     setStep('calendar');
-    // Reset viewport to current real date when screen opens
     setCurrentYear(TODAY.getFullYear());
     setCurrentMonth(TODAY.getMonth());
     setShowCalendar(true);
@@ -119,7 +110,7 @@ export default function BookingScreen({ onGoBack }) {
   };
 
   const handleMonthChange = (direction) => {
-    setSelectedDate(null); // Clear selected date upon month change
+    setSelectedDate(null);
     if (direction === 'next') {
       if (currentMonth === 11) {
         setCurrentMonth(0);
@@ -154,7 +145,6 @@ export default function BookingScreen({ onGoBack }) {
 
   const handleProceedToVerify = () => {
     if (!selectedDate) return;
-    // Automatically select the first available time slot as default
     if (selectedService && selectedService.timeSlots?.length > 0) {
       setSelectedTime(selectedService.timeSlots[0]);
     }
@@ -214,14 +204,14 @@ export default function BookingScreen({ onGoBack }) {
   return (
     <View 
       className="flex-1 bg-blue-50/50"
-      style={{ paddingBottom: insets.bottom }} // Handle physical home indicators at the bottom smoothly
+      style={{ paddingBottom: insets.bottom }}
     >
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
       
-      {/* Header with dynamic safe area padding top to avoid screen notches */}
+      {/* Header with adjusted spacing below status bar */}
       <View 
         className="bg-blue-900 pb-5 px-4 flex-row items-center shadow-md"
-        style={{ paddingTop: Math.max(insets.top, 16) }}
+        style={{ paddingTop: statusBarHeight + 12 }} 
       >
         <TouchableOpacity onPress={onGoBack} className="p-1">
           <MaterialCommunityIcons name="arrow-left" size={24} color="white" />
@@ -232,8 +222,6 @@ export default function BookingScreen({ onGoBack }) {
       </View>
 
       <ScrollView className="flex-1 px-4 py-6" showsVerticalScrollIndicator={false}>
-        
-        {/* Instruction */}
         <View className="mb-6 px-1">
           <Text className="text-xl font-black text-blue-950">Select a Help Desk Service</Text>
           <Text className="text-blue-600/70 font-medium text-sm mt-1">
@@ -241,12 +229,10 @@ export default function BookingScreen({ onGoBack }) {
           </Text>
         </View>
 
-        {/* List Title */}
         <Text className="text-xs font-bold text-blue-900/50 tracking-widest uppercase mb-3 pl-1">
           Available Programs & Schedules
         </Text>
 
-        {/* Service Cards */}
         <View className="bg-white rounded-3xl shadow-sm border border-blue-100/50 overflow-hidden mb-8">
           {CLINIC_SERVICES.map((service, index) => {
             const todayStatusText = getTodayStatus(service);
@@ -288,7 +274,7 @@ export default function BookingScreen({ onGoBack }) {
         </View>
       </ScrollView>
 
-      {/* --- ACTION SLIDE-UP CALENDAR MODAL --- */}
+      {/* Slide up Modal */}
       {selectedService && (
         <Modal
           visible={showCalendar}
@@ -298,10 +284,8 @@ export default function BookingScreen({ onGoBack }) {
         >
           <View className="flex-1 justify-end bg-black/40">
             <View className="bg-white rounded-t-[36px] p-6 shadow-2xl">
-              
               <View className="w-12 h-1.5 bg-blue-100 rounded-full align-center self-center mb-6" />
 
-              {/* Modal Header */}
               <View className="flex-row justify-between items-center mb-5">
                 <View className="flex-1 pr-4">
                   <Text className="text-xs font-bold text-blue-500 uppercase tracking-widest">
@@ -317,10 +301,8 @@ export default function BookingScreen({ onGoBack }) {
                 </TouchableOpacity>
               </View>
 
-              {/* STEP 1: CALENDAR LAYOUT */}
               {step === 'calendar' && (
                 <View>
-                  {/* Legend */}
                   <View className="flex-row gap-x-4 mb-5 px-1">
                     <View className="flex-row items-center gap-x-1.5">
                       <View className="w-3 h-3 rounded-full bg-emerald-500" />
@@ -332,13 +314,11 @@ export default function BookingScreen({ onGoBack }) {
                     </View>
                   </View>
 
-                  {/* Monthly Label Header with Fast-Navigation */}
                   <View className="flex-row justify-between items-center px-2 mb-4 bg-blue-50/50 py-2.5 rounded-xl border border-blue-100/30">
                     <TouchableOpacity onPress={() => handleMonthChange('prev')} className="p-1">
                       <MaterialCommunityIcons name="chevron-left" size={24} color="#1e3a8a" />
                     </TouchableOpacity>
                     
-                    {/* Fast Picker Activation Trigger */}
                     <TouchableOpacity 
                       onPress={() => setShowFastPicker(true)} 
                       className="flex-row items-center gap-x-1 px-3 py-1 bg-blue-100/50 rounded-full border border-blue-200"
@@ -354,7 +334,6 @@ export default function BookingScreen({ onGoBack }) {
                     </TouchableOpacity>
                   </View>
 
-                  {/* Weekday Row Labels */}
                   <View className="flex-row mb-2">
                     {daysOfWeek.map((day, idx) => (
                       <View key={idx} className="flex-1 items-center">
@@ -363,7 +342,6 @@ export default function BookingScreen({ onGoBack }) {
                     ))}
                   </View>
 
-                  {/* Dates Grid */}
                   <View className="flex-row flex-wrap mb-6">
                     {currentMonthDays.map((dateObj, idx) => {
                       if (!dateObj.day) {
@@ -414,7 +392,6 @@ export default function BookingScreen({ onGoBack }) {
                     })}
                   </View>
 
-                  {/* Action Button */}
                   <TouchableOpacity
                     disabled={!selectedDate}
                     onPress={handleProceedToVerify}
@@ -431,10 +408,8 @@ export default function BookingScreen({ onGoBack }) {
                 </View>
               )}
 
-              {/* STEP 2: VERIFICATION & TIME LAYOUT */}
               {step === 'verify' && (
                 <View className="pb-4">
-                  {/* Selected Date Summary */}
                   <View className="bg-blue-50/50 border border-blue-100/50 p-4 rounded-2xl flex-row items-center mb-5">
                     <MaterialCommunityIcons name="calendar-check" size={24} color="#1e3a8a" className="mr-3" />
                     <View className="flex-1">
@@ -445,7 +420,6 @@ export default function BookingScreen({ onGoBack }) {
                     </View>
                   </View>
 
-                  {/* NEW: Dynamic Appointment Time Slot Picker */}
                   <Text className="text-sm font-bold text-blue-900/80 mb-2">
                     Select Appointment Time
                   </Text>
@@ -472,14 +446,12 @@ export default function BookingScreen({ onGoBack }) {
                     })}
                   </View>
 
-                  {/* Patient ID Input */}
                   <Text className="text-sm font-bold text-blue-900/80 mb-2">
                     Enter Patient ID Number
                   </Text>
-                  
                   <View className="flex-row gap-x-2 mb-2">
                     <TextInput
-                      className="flex-1 bg-blue-50/40 px-4 py-3.5 rounded-xl text-blue-950 font-bold border border-blue-100 focus:border-blue-500"
+                      className="flex-1 bg-blue-50/40 px-4 py-3.5 rounded-xl text-blue-950 font-bold border border-blue-100/50 focus:border-blue-500"
                       placeholder="e.g., PT-101"
                       placeholderTextColor="#94a3b8"
                       value={patientIdInput}
@@ -493,7 +465,6 @@ export default function BookingScreen({ onGoBack }) {
                     We'll match your Patient ID number against clinic database records to lock this reservation.
                   </Text>
 
-                  {/* Bottom Navigation */}
                   <View className="flex-row gap-x-3">
                     <TouchableOpacity
                       onPress={() => setStep('calendar')}
@@ -518,13 +489,12 @@ export default function BookingScreen({ onGoBack }) {
                   </View>
                 </View>
               )}
-
             </View>
           </View>
         </Modal>
       )}
 
-      {/* --- FAST SELECTION DROPDOWN MODAL --- */}
+      {/* Fast Selection Dropdown */}
       <Modal
         visible={showFastPicker}
         animationType="fade"
@@ -546,12 +516,9 @@ export default function BookingScreen({ onGoBack }) {
                   <Text className="text-sm font-black text-blue-500 mb-2.5 tracking-wider px-1">
                     {year}
                   </Text>
-                  
                   <View className="flex-row flex-wrap gap-2">
                     {monthsList.map((monthName, idx) => {
                       const isSelectedMonth = currentMonth === idx && currentYear === year;
-                      
-                      // Disable past months for the current year (2026)
                       const lastDay = new Date(year, idx + 1, 0);
                       lastDay.setHours(23, 59, 59, 999);
                       const isPast = lastDay < TODAY;

@@ -24,15 +24,15 @@ export default function HomeScreen({ onNavigate }) {
       */}
       <View className="flex-1 justify-center px-6 py-4">
         
-        {/* Main Welcome Hero Card */}
-        <View className="bg-white p-7 rounded-3xl shadow-md shadow-blue-100 border border-blue-100/50 w-full items-center mb-8">
-          <View className="bg-blue-100/60 p-4 rounded-2xl mb-4">
-            <MaterialCommunityIcons name="hospital-building" size={40} color="#1e3a8a" />
+        {/* Main Welcome Hero Card with Blue Background */}
+        <View className="bg-blue-900 p-7 rounded-3xl shadow-md shadow-blue-900/20 border border-blue-950/20 w-full items-center mb-8">
+          <View className="bg-white/10 p-4 rounded-2xl mb-4">
+            <MaterialCommunityIcons name="hospital-building" size={40} color="#ffffff" />
           </View>
-          <Text className="text-2xl font-black text-blue-950 text-center tracking-tight">
+          <Text className="text-2xl font-black text-white text-center tracking-tight">
             Barangay Health Center
           </Text>
-          <Text className="text-blue-700/80 mt-2 text-center text-sm font-medium leading-relaxed px-2">
+          <Text className="text-blue-100/80 mt-2 text-center text-sm font-medium leading-relaxed px-2">
             Welcome to your digital patient gateway. Easily book consultations or check schedule statuses.
           </Text>
         </View>

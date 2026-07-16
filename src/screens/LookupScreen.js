@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, ScrollView, StatusBar, Keyboard } from 'react-native';
-// 1. Import the Hook to retrieve physical boundary metrics dynamically
+import { Text, View, TextInput, TouchableOpacity, ScrollView, StatusBar, Keyboard, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MOCK_PATIENTS } from '../constants/mockPatients';
@@ -10,8 +9,10 @@ export default function LookupScreen({ onGoBack }) {
   const [patientData, setPatientData] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
 
-  // 2. Extract safe area edge values
   const insets = useSafeAreaInsets();
+  const statusBarHeight = Platform.OS === 'android' 
+    ? (StatusBar.currentHeight || 0) 
+    : insets.top;
 
   const handleLookup = () => {
     Keyboard.dismiss();
@@ -27,17 +28,14 @@ export default function LookupScreen({ onGoBack }) {
   return (
     <View 
       className="flex-1 bg-blue-50/50"
-      style={{ paddingBottom: insets.bottom }} // Prevents overlapping with the home indicator bar
+      style={{ paddingBottom: insets.bottom }}
     >
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
       
-      {/* 
-        3. Dynamically set top padding on the dark blue Header.
-        This allows the background color to bleed into the status bar area seamlessly.
-      */}
+      {/* Header with adjusted spacing below status bar */}
       <View 
         className="bg-blue-900 pb-5 px-4 flex-row items-center shadow-md"
-        style={{ paddingTop: Math.max(insets.top, 16) }} // Fallback to 16dp if top inset is 0
+        style={{ paddingTop: statusBarHeight + 12 }} 
       >
         <TouchableOpacity onPress={onGoBack} className="p-1">
           <MaterialCommunityIcons name="arrow-left" size={24} color="white" />
@@ -48,8 +46,6 @@ export default function LookupScreen({ onGoBack }) {
       </View>
 
       <ScrollView className="flex-1 px-4 py-6" keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
-        
-        {/* Search Panel Card */}
         <View className="bg-white p-6 rounded-3xl shadow-sm border border-blue-100/50 mb-6">
           <Text className="text-sm font-bold text-blue-900/80 mb-2">
             Enter Patient ID Number
@@ -76,17 +72,14 @@ export default function LookupScreen({ onGoBack }) {
           </Text>
         </View>
 
-        {/* Result Area */}
         {hasSearched && (
           patientData ? (
             <View>
-              {/* Profile Card */}
               <View className="mb-4 pl-1">
                 <Text className="text-xs font-bold text-blue-900/50 tracking-widest uppercase">Patient Name</Text>
                 <Text className="text-2xl font-black text-blue-950 mt-0.5">{patientData.name}</Text>
               </View>
 
-              {/* Status Display Card */}
               <Text className="text-xs font-bold text-blue-900/50 tracking-widest uppercase mb-2 pl-1">Upcoming Appointment</Text>
               <View className="bg-white p-5 rounded-3xl shadow-sm border border-blue-100/50 mb-6">
                 <View className="flex-row justify-between items-start border-b border-blue-50 pb-4 mb-4">
@@ -94,8 +87,6 @@ export default function LookupScreen({ onGoBack }) {
                     <Text className="font-extrabold text-blue-950 text-base">{patientData.activeAppointment.service}</Text>
                     <Text className="text-blue-600 font-semibold text-xs mt-0.5">Clinical Consultation</Text>
                   </View>
-                  
-                  {/* Status Badge */}
                   <View className={`px-4 py-1.5 rounded-full ${
                     patientData.activeAppointment.status === "Approved" ? "bg-emerald-100/80" : "bg-amber-100/80"
                   }`}>
@@ -107,7 +98,6 @@ export default function LookupScreen({ onGoBack }) {
                   </View>
                 </View>
 
-                {/* Date & Time details */}
                 <View className="flex-row justify-between">
                   <View className="flex-row items-center">
                     <MaterialCommunityIcons name="calendar" size={18} color="#2563eb" className="mr-1.5" />
@@ -120,7 +110,6 @@ export default function LookupScreen({ onGoBack }) {
                 </View>
               </View>
 
-              {/* History list */}
               <Text className="text-xs font-bold text-blue-900/50 tracking-widest uppercase mb-2 pl-1">Past Records ({patientData.history.length})</Text>
               <View className="bg-white rounded-3xl shadow-sm border border-blue-100/50 overflow-hidden mb-8">
                 {patientData.history.map((record) => (
@@ -136,10 +125,8 @@ export default function LookupScreen({ onGoBack }) {
                   </View>
                 ))}
               </View>
-
             </View>
           ) : (
-            /* Error Card */
             <View className="bg-red-50 p-6 rounded-3xl border border-red-100 items-center justify-center py-8">
               <MaterialCommunityIcons name="alert-circle-outline" size={48} color="#ef4444" className="mb-2" />
               <Text className="font-extrabold text-red-950 text-lg">No Patient Record Found</Text>
@@ -149,7 +136,6 @@ export default function LookupScreen({ onGoBack }) {
             </View>
           )
         )}
-
       </ScrollView>
     </View>
   );
