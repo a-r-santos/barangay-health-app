@@ -131,7 +131,7 @@ export default function AppointmentsPage({
         <div className="p-6 border-b border-blue-50 flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center bg-blue-50/20">
           <div>
             <h3 className="text-base font-black text-blue-955">
-              Daily Booking Approvals
+              Appointment Queue
               {statusFilter !== 'ALL' && (
                 <span className="ml-2 text-blue-900 font-black text-xs bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-md uppercase tracking-wider">
                   {statusFilter === 'Approved' ? 'Confirmed' : statusFilter} List
