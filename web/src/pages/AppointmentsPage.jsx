@@ -54,7 +54,7 @@ export default function AppointmentsPage({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in duration-200">
       
       {/* Clickable Card Metrics Row - Contained only inside this workspace view */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -63,12 +63,12 @@ export default function AppointmentsPage({
         <button 
           onClick={() => setStatusFilter('ALL')}
           className={`p-5 rounded-2xl border text-left transition shadow-sm flex items-center justify-between cursor-pointer ${
-            statusFilter === 'ALL' ? 'bg-blue-50/50 border-blue-400 ring-2 ring-blue-100' : 'bg-white border-slate-200'
+            statusFilter === 'ALL' ? 'bg-blue-50/50 border-blue-400 ring-2 ring-blue-100' : 'bg-white border-blue-100 hover:bg-blue-50/20'
           }`}
         >
           <div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Total Bookings</p>
-            <h4 className="text-2xl font-black text-slate-900 mt-1">{totalBooked}</h4>
+            <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider opacity-80">Total Bookings</p>
+            <h4 className="text-2xl font-black text-blue-955 mt-1">{totalBooked}</h4>
           </div>
           <div className="bg-blue-50 p-3 rounded-xl border border-blue-100 text-blue-900">
             <Calendar size={20} />
@@ -79,11 +79,11 @@ export default function AppointmentsPage({
         <button 
           onClick={() => setStatusFilter('Pending')}
           className={`p-5 rounded-2xl border text-left transition shadow-sm flex items-center justify-between cursor-pointer ${
-            statusFilter === 'Pending' ? 'bg-amber-50/50 border-amber-400 ring-2 ring-amber-100' : 'bg-white border-slate-200'
+            statusFilter === 'Pending' ? 'bg-amber-50/50 border-amber-400 ring-2 ring-amber-100' : 'bg-white border-blue-100 hover:bg-amber-50/20'
           }`}
         >
           <div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Pending Verification</p>
+            <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider opacity-80">Pending Verification</p>
             <h4 className="text-2xl font-black text-amber-600 mt-1">{pendingCount}</h4>
           </div>
           <div className="bg-amber-50 p-3 rounded-xl border border-amber-100 text-amber-600">
@@ -95,11 +95,11 @@ export default function AppointmentsPage({
         <button 
           onClick={() => setStatusFilter('Approved')}
           className={`p-5 rounded-2xl border text-left transition shadow-sm flex items-center justify-between cursor-pointer ${
-            statusFilter === 'Approved' ? 'bg-emerald-50/50 border-emerald-400 ring-2 ring-emerald-100' : 'bg-white border-slate-200'
+            statusFilter === 'Approved' ? 'bg-emerald-50/50 border-emerald-400 ring-2 ring-emerald-100' : 'bg-white border-blue-100 hover:bg-emerald-50/20'
           }`}
         >
           <div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Confirmed Slots</p>
+            <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider opacity-80">Confirmed Slots</p>
             <h4 className="text-2xl font-black text-emerald-600 mt-1">{approvedCount}</h4>
           </div>
           <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-100 text-emerald-600">
@@ -111,11 +111,11 @@ export default function AppointmentsPage({
         <button 
           onClick={() => setStatusFilter('Rejected')}
           className={`p-5 rounded-2xl border text-left transition shadow-sm flex items-center justify-between cursor-pointer ${
-            statusFilter === 'Rejected' ? 'bg-red-50/50 border-red-400 ring-2 ring-red-100' : 'bg-white border-slate-200'
+            statusFilter === 'Rejected' ? 'bg-red-50/50 border-red-400 ring-2 ring-red-100' : 'bg-white border-blue-100 hover:bg-red-50/20'
           }`}
         >
           <div>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Rejected History</p>
+            <p className="text-[10px] font-bold text-blue-900 uppercase tracking-wider opacity-80">Rejected History</p>
             <h4 className="text-2xl font-black text-red-600 mt-1">{rejectedCount}</h4>
           </div>
           <div className="bg-red-50 p-3 rounded-xl border border-red-100 text-red-600">
@@ -125,20 +125,20 @@ export default function AppointmentsPage({
       </div>
 
       {/* Database View Workspace Wrapper */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-3xl border border-blue-100 shadow-sm overflow-hidden">
         
         {/* Sub-Header Actions panel layout */}
-        <div className="p-6 border-b border-slate-200 flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center bg-slate-50/50">
+        <div className="p-6 border-b border-blue-50 flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center bg-blue-50/20">
           <div>
-            <h3 className="text-base font-black text-slate-955">
+            <h3 className="text-base font-black text-blue-955">
               Daily Booking Approvals
               {statusFilter !== 'ALL' && (
-                <span className="ml-2 text-blue-600 font-extrabold text-sm capitalize">
-                  ({statusFilter === 'Approved' ? 'Confirmed' : statusFilter} List)
+                <span className="ml-2 text-blue-900 font-black text-xs bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-md uppercase tracking-wider">
+                  {statusFilter === 'Approved' ? 'Confirmed' : statusFilter} List
                 </span>
               )}
             </h3>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">
+            <p className="text-xs text-blue-600/80 font-medium mt-0.5">
               Manage online patient reservations requesting check-in parameters
             </p>
           </div>
@@ -146,13 +146,13 @@ export default function AppointmentsPage({
           <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto items-stretch sm:items-center">
             {/* Dropdown Calendar Date Selector */}
             <div className="relative flex items-center min-w-[220px]">
-              <span className="absolute left-3.5 pointer-events-none text-slate-400">
+              <span className="absolute left-3.5 pointer-events-none text-blue-600">
                 <CalendarDays size={16} />
               </span>
               <select
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full bg-white border border-slate-200 pl-10 pr-8 py-2 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:border-blue-500 appearance-none cursor-pointer"
+                className="w-full bg-white border border-blue-100 pl-10 pr-8 py-2 rounded-xl text-sm font-semibold text-blue-955 focus:outline-none focus:border-blue-900 appearance-none cursor-pointer"
               >
                 <option value="">All Scheduled Dates</option>
                 {sortedDates.map((dateStr) => {
@@ -167,20 +167,20 @@ export default function AppointmentsPage({
                   );
                 })}
               </select>
-              <span className="absolute right-3.5 pointer-events-none text-slate-400 text-xs font-black">▼</span>
+              <span className="absolute right-3.5 pointer-events-none text-blue-900 text-[10px] font-black">▼</span>
             </div>
 
             {/* Input Search Box Element */}
             <div className="relative w-full sm:w-72">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                <Search size={16} className="text-slate-400" />
+                <Search size={16} className="text-blue-600" />
               </span>
               <input
                 type="text"
                 placeholder="Search by ID or Name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-white border border-slate-200 pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-semibold text-slate-900"
+                className="w-full bg-white border border-blue-100 pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:border-blue-900 font-semibold text-blue-955"
               />
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function AppointmentsPage({
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+              <tr className="border-b border-blue-50 bg-blue-50/10 text-[11px] font-bold text-blue-900 uppercase tracking-widest">
                 <th className="py-4 px-6">Patient ID</th>
                 <th className="py-4 px-6">Resident Name</th>
                 <th className="py-4 px-6">Clinical Specialty</th>
@@ -200,19 +200,19 @@ export default function AppointmentsPage({
                 <th className="py-4 px-6 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-blue-50/60">
               {filteredAppointments.length > 0 ? (
                 filteredAppointments.map((app) => {
                   const isDayFull = (capacityPerDay[app.date]?.totalApproved || 0) >= 10;
 
                   return (
-                    <tr key={app.id} className="hover:bg-slate-50/50 transition">
+                    <tr key={app.id} className="hover:bg-blue-50/20 transition">
                       <td className="py-4 px-6 font-extrabold text-blue-900 text-sm">{app.patientId}</td>
-                      <td className="py-4 px-6 font-bold text-slate-955 text-sm">{app.name}</td>
-                      <td className="py-4 px-6 text-xs font-semibold text-slate-600">{app.service}</td>
-                      <td className="py-4 px-6 text-xs font-bold text-slate-700">{app.date || 'N/A'}</td>
-                      <td className="py-4 px-6 text-xs font-semibold text-slate-800">
-                        <span className="bg-slate-100 py-1 px-2.5 rounded-md border border-slate-200">{app.time}</span>
+                      <td className="py-4 px-6 font-bold text-blue-955 text-sm">{app.name}</td>
+                      <td className="py-4 px-6 text-xs font-semibold text-blue-900/80">{app.service}</td>
+                      <td className="py-4 px-6 text-xs font-bold text-blue-955">{app.date || 'N/A'}</td>
+                      <td className="py-4 px-6 text-xs font-semibold text-blue-955">
+                        <span className="bg-blue-50 py-1 px-2.5 rounded-md border border-blue-100 text-blue-900 font-bold">{app.time}</span>
                       </td>
                       <td className="py-4 px-6">
                         <span className={`text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider ${
@@ -232,21 +232,21 @@ export default function AppointmentsPage({
                               onClick={() => handleApproveClick(app)}
                               className={`font-extrabold text-xs px-3.5 py-1.5 rounded-lg transition shadow-sm ${
                                 isDayFull
-                                  ? 'bg-slate-100 border border-slate-200 text-slate-400 cursor-not-allowed shadow-none'
-                                  : 'bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer'
+                                  ? 'bg-blue-50 border border-blue-100 text-blue-900/40 cursor-not-allowed shadow-none'
+                                  : 'bg-blue-900 hover:bg-blue-955 text-white cursor-pointer'
                               }`}
                             >
                               Approve
                             </button>
                             <button 
                               onClick={() => onStatusChange(app.id, 'Rejected')}
-                              className="bg-white border border-slate-200 hover:bg-red-50 hover:border-red-200 text-slate-700 hover:text-red-700 font-extrabold text-xs px-3.5 py-1.5 rounded-lg transition cursor-pointer"
+                              className="bg-white border border-blue-100 hover:bg-red-50 hover:border-red-200 text-blue-900 hover:text-red-700 font-extrabold text-xs px-3.5 py-1.5 rounded-lg transition cursor-pointer"
                             >
                               Reject
                             </button>
                           </>
                         ) : (
-                          <span className="text-xs text-slate-400 italic">No actions available</span>
+                          <span className="text-xs text-blue-900/40 italic font-medium">No actions available</span>
                         )}
                       </td>
                     </tr>
@@ -254,7 +254,7 @@ export default function AppointmentsPage({
                 })
               ) : (
                 <tr>
-                  <td colSpan="7" className="py-12 text-center text-sm font-semibold text-slate-400">
+                  <td colSpan="7" className="py-12 text-center text-sm font-semibold text-blue-900/40">
                     No matching active bookings found under this category filter.
                   </td>
                 </tr>

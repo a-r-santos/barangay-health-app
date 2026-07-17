@@ -157,7 +157,7 @@ export default function PatientsPage() {
         const newRecord = {
           id: `REC-${Date.now()}`,
           date: historyFormData.date,
-          appointmentType: historyFormData.appointmentType, // Checkup type saved in medical record
+          appointmentType: historyFormData.appointmentType,
           findings: historyFormData.findings.trim()
         };
 
@@ -196,7 +196,7 @@ export default function PatientsPage() {
           age: parseInt(formData.age, 10) || 0,
           gender: formData.gender,
           contact: formData.contact,
-          history: [] // New profiles initialize empty of historical records
+          history: []
         };
 
         setPatients(prev => [...prev, newPatient]);
@@ -251,24 +251,24 @@ export default function PatientsPage() {
 
       {/* --- CONDITIONAL VIEWS: PATIENT DETAIL PROFILE VS REGISTRY LOG TABLE --- */}
       {selectedPatient ? (
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-200">
+        <div className="bg-white rounded-3xl border border-blue-100 shadow-sm overflow-hidden animate-in fade-in duration-200">
           
           {/* Detailed Sub-view Navigation Control Header */}
-          <div className="p-6 border-b border-slate-200 bg-slate-50/50 flex items-center justify-between flex-wrap gap-4">
+          <div className="p-6 border-b border-blue-50 bg-blue-50/20 flex items-center justify-between flex-wrap gap-4">
             <button 
               onClick={() => { setSelectedPatient(null); setIsEditing(false); }}
-              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-extrabold text-xs tracking-wide uppercase group border border-slate-200 bg-white py-2 px-4 rounded-xl shadow-sm transition cursor-pointer"
+              className="flex items-center gap-2 text-blue-900 hover:text-blue-955 font-extrabold text-xs tracking-wide uppercase group border border-blue-100 bg-white py-2 px-4 rounded-xl shadow-sm transition cursor-pointer"
             >
-              <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition" /> Back to Registry
+              <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition text-blue-700" /> Back to Registry
             </button>
             
             <div className="flex items-center gap-2">
               {!isEditing && (
                 <button
                   onClick={handleStartEdit}
-                  className="flex items-center gap-1.5 text-blue-900 hover:text-blue-955 font-extrabold text-xs tracking-wide uppercase border border-slate-200 bg-white py-2 px-4 rounded-xl shadow-sm transition cursor-pointer"
+                  className="flex items-center gap-1.5 text-blue-900 hover:text-blue-955 font-extrabold text-xs tracking-wide uppercase border border-blue-100 bg-white py-2 px-4 rounded-xl shadow-sm transition cursor-pointer"
                 >
-                  <Edit size={14} /> Edit Profile
+                  <Edit size={14} className="text-blue-700" /> Edit Profile
                 </button>
               )}
               <span className="text-xs font-black text-blue-900 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full uppercase tracking-wider">
@@ -280,13 +280,13 @@ export default function PatientsPage() {
           {/* Demographic Structural Fields Editing Panel */}
           {isEditing ? (
             <form onSubmit={handleSaveEdit} className="p-8 space-y-6">
-              <div className="border-b border-slate-100 pb-4">
-                <h3 className="text-lg font-black text-slate-900">Modify Patient Demographics</h3>
-                <p className="text-xs text-slate-500">Update the demographic markers for registry key {selectedPatient.id}</p>
+              <div className="border-b border-blue-50 pb-4">
+                <h3 className="text-lg font-black text-blue-955">Modify Patient Demographics</h3>
+                <p className="text-xs text-blue-600/80 font-medium">Update the demographic markers for registry key {selectedPatient.id}</p>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Full Name</label>
+                <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Full Name</label>
                 <input
                   type="text"
                   name="name"
@@ -294,13 +294,13 @@ export default function PatientsPage() {
                   disabled={isSubmitting}
                   value={editFormData.name}
                   onChange={handleEditChange}
-                  className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
+                  className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Age</label>
+                  <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Age</label>
                   <input
                     type="text"
                     name="age"
@@ -310,18 +310,18 @@ export default function PatientsPage() {
                     disabled={isSubmitting}
                     value={editFormData.age}
                     onChange={handleEditChange}
-                    className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
+                    className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Gender</label>
+                  <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Gender</label>
                   <select
                     name="gender"
                     disabled={isSubmitting}
                     value={editFormData.gender}
                     onChange={handleEditChange}
-                    className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
+                    className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -331,7 +331,7 @@ export default function PatientsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Mobile Contact</label>
+                <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Mobile Contact</label>
                 <input
                   type="text"
                   name="contact"
@@ -340,16 +340,16 @@ export default function PatientsPage() {
                   disabled={isSubmitting}
                   value={editFormData.contact}
                   onChange={handleEditChange}
-                  className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
+                  className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                 />
               </div>
 
-              <div className="flex justify-end gap-x-3 pt-4 border-t border-slate-100">
+              <div className="flex justify-end gap-x-3 pt-4 border-t border-blue-50">
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
                   disabled={isSubmitting}
-                  className="border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs px-5 py-3 rounded-2xl transition cursor-pointer"
+                  className="border border-blue-100 hover:bg-blue-50/50 text-blue-900 font-bold text-xs px-5 py-3 rounded-2xl transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -365,58 +365,58 @@ export default function PatientsPage() {
           ) : (
             /* Main Profile Details Visual View Block */
             <div className="p-8 space-y-8">
-              <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center border-b border-slate-100 pb-6">
+              <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center border-b border-blue-50 pb-6">
                 <div className="w-20 h-20 bg-blue-900 text-white rounded-3xl flex items-center justify-center font-black text-2xl shadow-md border border-blue-955 shrink-0">
                   {selectedPatient.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
                 </div>
                 <div className="space-y-1.5">
                   <div className="flex items-center gap-3 flex-wrap">
-                    <h2 className="text-2xl font-black text-slate-900">{selectedPatient.name}</h2>
-                    <span className="text-[11px] font-black tracking-widest uppercase bg-blue-50 text-blue-800 px-2.5 py-0.5 rounded-md border border-blue-100">
+                    <h2 className="text-2xl font-black text-blue-955">{selectedPatient.name}</h2>
+                    <span className="text-[11px] font-black tracking-widest uppercase bg-blue-50 text-blue-900 px-2.5 py-0.5 rounded-md border border-blue-100">
                       {selectedPatient.id}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Registered Record Profile</p>
+                  <p className="text-xs text-blue-600/70 font-bold uppercase tracking-wider">Registered Record Profile</p>
                 </div>
               </div>
 
               {/* Core Demographic Parameter Displays */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-slate-50 border border-slate-200/60 p-5 rounded-2xl flex items-center gap-4">
-                  <div className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-600"><User size={20} /></div>
+                <div className="bg-blue-50/30 border border-blue-100/70 p-5 rounded-2xl flex items-center gap-4">
+                  <div className="p-2.5 bg-white border border-blue-100 rounded-xl text-blue-900"><User size={20} /></div>
                   <div>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Gender Orientation</p>
-                    <p className="text-sm font-black text-slate-900 mt-0.5">{selectedPatient.gender}</p>
+                    <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider">Gender Orientation</p>
+                    <p className="text-sm font-black text-blue-955 mt-0.5">{selectedPatient.gender}</p>
                   </div>
                 </div>
                 
-                <div className="bg-slate-50 border border-slate-200/60 p-5 rounded-2xl flex items-center gap-4">
-                  <div className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-600"><Calendar size={20} /></div>
+                <div className="bg-blue-50/30 border border-blue-100/70 p-5 rounded-2xl flex items-center gap-4">
+                  <div className="p-2.5 bg-white border border-blue-100 rounded-xl text-blue-900"><Calendar size={20} /></div>
                   <div>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Current Age</p>
-                    <p className="text-sm font-black text-slate-900 mt-0.5">{selectedPatient.age} Years Old</p>
+                    <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider">Current Age</p>
+                    <p className="text-sm font-black text-blue-955 mt-0.5">{selectedPatient.age} Years Old</p>
                   </div>
                 </div>
 
-                <div className="bg-slate-50 border border-slate-200/60 p-5 rounded-2xl flex items-center gap-4">
-                  <div className="p-2.5 bg-white border border-slate-200 rounded-xl text-slate-600"><Phone size={20} /></div>
+                <div className="bg-blue-50/30 border border-blue-100/70 p-5 rounded-2xl flex items-center gap-4">
+                  <div className="p-2.5 bg-white border border-blue-100 rounded-xl text-blue-900"><Phone size={20} /></div>
                   <div>
-                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Primary Contact</p>
-                    <p className="text-sm font-black text-slate-900 mt-0.5">{selectedPatient.contact || 'None Listed'}</p>
+                    <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider">Primary Contact</p>
+                    <p className="text-sm font-black text-blue-955 mt-0.5">{selectedPatient.contact || 'None Listed'}</p>
                   </div>
                 </div>
               </div>
 
               {/* Detailed Medical Records History Timeline */}
-              <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-                <div className="bg-slate-50 p-4 border-b border-slate-200 flex items-center justify-between gap-4 flex-wrap">
+              <div className="border border-blue-100 rounded-2xl overflow-hidden shadow-sm">
+                <div className="bg-blue-50/20 p-4 border-b border-blue-50 flex items-center justify-between gap-4 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <ShieldAlert size={16} className="text-slate-500" />
-                    <h4 className="text-xs font-black text-slate-700 uppercase tracking-widest">Medical History & Availed Checkups</h4>
+                    <ShieldAlert size={16} className="text-blue-700" />
+                    <h4 className="text-xs font-black text-blue-955 uppercase tracking-widest">Medical History & Availed Checkups</h4>
                   </div>
                   <button
                     onClick={() => setIsHistoryModalOpen(true)}
-                    className="bg-blue-900 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl hover:bg-blue-950 transition flex items-center gap-1 shadow-sm cursor-pointer"
+                    className="bg-blue-900 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl hover:bg-blue-955 transition flex items-center gap-1 shadow-sm cursor-pointer"
                   >
                     <Plus size={13} /> Add Checkup Record
                   </button>
@@ -424,27 +424,26 @@ export default function PatientsPage() {
                 
                 <div className="p-6 bg-white">
                   {selectedPatient.history && selectedPatient.history.length > 0 ? (
-                    <div className="relative border-l-2 border-slate-100 pl-6 ml-3 space-y-6 my-2">
+                    <div className="relative border-l-2 border-blue-100 pl-6 ml-3 space-y-6 my-2">
                       {selectedPatient.history.map((record) => (
                         <div key={record.id} className="relative group">
                           <div className="absolute -left-[31px] top-1 bg-white border-2 border-blue-955 rounded-full w-3 h-3 group-hover:bg-blue-900 transition" />
                           
                           <div className="space-y-2">
                             <div className="flex items-center gap-2 flex-wrap">
-                              <span className="inline-flex items-center gap-1 text-[11px] font-black text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
+                              <span className="inline-flex items-center gap-1 text-[11px] font-black text-blue-900 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-md">
                                 <Calendar size={11} /> {record.date}
                               </span>
-                              {/* Display what check-up type was availed directly inside history */}
-                              <span className="inline-flex items-center gap-1 text-[10px] font-black text-blue-800 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full uppercase tracking-wide">
+                              <span className="inline-flex items-center gap-1 text-[10px] font-black text-blue-900 bg-blue-100/60 border border-blue-200 px-2.5 py-0.5 rounded-full uppercase tracking-wide">
                                 Availed: {record.appointmentType}
                               </span>
                             </div>
                             
-                            <div className="bg-slate-50 border border-slate-100 rounded-xl p-4">
-                              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                            <div className="bg-blue-50/20 border border-blue-50 rounded-xl p-4">
+                              <p className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1 flex items-center gap-1">
                                 <ClipboardList size={12} /> Clinical Findings
                               </p>
-                              <p className="text-sm font-bold text-slate-800 leading-relaxed whitespace-pre-wrap">
+                              <p className="text-sm font-bold text-blue-955 leading-relaxed whitespace-pre-wrap">
                                 {record.findings}
                               </p>
                             </div>
@@ -454,8 +453,8 @@ export default function PatientsPage() {
                     </div>
                   ) : (
                     <div className="text-center py-8 space-y-2">
-                      <p className="text-sm font-bold text-slate-500">No diagnostic checkup logs are linked to this primary account.</p>
-                      <p className="text-xs text-slate-400">Consultation entries sync dynamically following counter check-in confirmations.</p>
+                      <p className="text-sm font-bold text-blue-900/70">No diagnostic checkup logs are linked to this primary account.</p>
+                      <p className="text-xs text-blue-600/50 font-medium">Consultation entries sync dynamically following counter check-in confirmations.</p>
                     </div>
                   )}
                 </div>
@@ -465,30 +464,30 @@ export default function PatientsPage() {
         </div>
       ) : (
         /* --- CORE CENTRAL REGISTRY LOG TABLE --- */
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-200">
-          <div className="p-6 border-b border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center bg-slate-50/50">
+        <div className="bg-white rounded-3xl border border-blue-100 shadow-sm overflow-hidden animate-in fade-in duration-200">
+          <div className="p-6 border-b border-blue-50 flex flex-col md:flex-row gap-4 justify-between items-center bg-blue-50/20">
             <div>
-              <h3 className="text-base font-black text-slate-955">Patient Registry & Records</h3>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">Access resident medical profiles and historical checkup tracking</p>
+              <h3 className="text-base font-black text-blue-955">Patient Registry & Records</h3>
+              <p className="text-xs text-blue-600/80 font-medium mt-0.5">Access resident medical profiles and historical checkup tracking</p>
             </div>
 
             <div className="flex gap-x-3 w-full md:w-auto">
               <div className="relative flex-1 md:w-64">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                  <Search size={16} className="text-slate-400" />
+                  <Search size={16} className="text-blue-600" />
                 </span>
                 <input
                   type="text"
                   placeholder="Search patients by name or ID..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full bg-white border border-slate-200 pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-semibold text-slate-900"
+                  className="w-full bg-white border border-blue-100 pl-10 pr-4 py-2 rounded-xl text-sm focus:outline-none focus:border-blue-500 font-semibold text-blue-955"
                 />
               </div>
               
               <button 
                 onClick={() => setIsModalOpen(true)}
-                className="bg-blue-900 text-white font-bold text-xs px-4 py-2 rounded-xl hover:bg-blue-950 transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+                className="bg-blue-900 text-white font-bold text-xs px-4 py-2 rounded-xl hover:bg-blue-955 transition flex items-center gap-1.5 shadow-sm cursor-pointer"
               >
                 <Plus size={16} /> Add Patient
               </button>
@@ -498,7 +497,7 @@ export default function PatientsPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+                <tr className="border-b border-blue-50 bg-blue-50/10 text-[11px] font-bold text-blue-900 uppercase tracking-widest">
                   <th className="py-4 px-6">ID</th>
                   <th className="py-4 px-6">Full Name</th>
                   <th className="py-4 px-6">Age / Gender</th>
@@ -507,20 +506,20 @@ export default function PatientsPage() {
                   <th className="py-4 px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-blue-50/60">
                 {filtered.length > 0 ? (
                   filtered.map((patient) => (
-                    <tr key={patient.id} className="hover:bg-slate-50/50 transition">
+                    <tr key={patient.id} className="hover:bg-blue-50/20 transition">
                       <td className="py-4 px-6 font-extrabold text-blue-900 text-sm">{patient.id}</td>
-                      <td className="py-4 px-6 font-bold text-slate-955 text-sm">{patient.name}</td>
-                      <td className="py-4 px-6 text-xs font-semibold text-slate-700">{patient.age} yrs / {patient.gender}</td>
-                      <td className="py-4 px-6 text-xs font-semibold text-slate-800">{patient.contact || 'No Number'}</td>
+                      <td className="py-4 px-6 font-bold text-blue-955 text-sm">{patient.name}</td>
+                      <td className="py-4 px-6 text-xs font-semibold text-blue-900/80">{patient.age} yrs / {patient.gender}</td>
+                      <td className="py-4 px-6 text-xs font-semibold text-blue-955/80">{patient.contact || 'No Number'}</td>
                       <td className="py-4 px-6">
                         <button 
                           onClick={() => setSelectedPatient(patient)}
-                          className="text-blue-900 hover:text-blue-955 font-extrabold text-xs flex items-center gap-1 cursor-pointer border border-slate-200 bg-slate-50/50 hover:bg-slate-100 py-1 px-2.5 rounded-lg transition"
+                          className="text-blue-900 hover:text-blue-955 font-extrabold text-xs flex items-center gap-1 cursor-pointer border border-blue-100 bg-blue-50/40 hover:bg-blue-50 py-1 px-2.5 rounded-lg transition"
                         >
-                          <UserCheck size={14} /> View File ({patient.history?.length || 0})
+                          <UserCheck size={14} className="text-blue-700" /> View File ({patient.history?.length || 0})
                         </button>
                       </td>
                       <td className="py-4 px-6 text-right">
@@ -542,7 +541,7 @@ export default function PatientsPage() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6" className="py-12 text-center text-sm font-semibold text-slate-400">
+                    <td colSpan="6" className="py-12 text-center text-sm font-semibold text-blue-900/40">
                       No registry matches found.
                     </td>
                   </tr>
@@ -553,24 +552,24 @@ export default function PatientsPage() {
         </div>
       )}
 
-      {/* --- REVISED REGISTRATION DIALOG (PROGRAM DROP DOWN REMOVED) --- */}
+      {/* --- REGISTRATION DIALOG --- */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-          <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+        <div className="fixed inset-0 bg-blue-950/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+          <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl border border-blue-100 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="p-6 border-b border-blue-50 flex justify-between items-center bg-blue-50/20">
               <div className="flex items-center gap-x-2.5">
                 <div className="bg-blue-100 p-2 rounded-xl text-blue-900"><UserPlus size={20} /></div>
                 <div>
-                  <h3 className="font-black text-slate-955 text-base leading-none">Register Patient</h3>
-                  <span className="text-[10px] text-slate-500 font-bold tracking-wide uppercase">New Profile Document Entry</span>
+                  <h3 className="font-black text-blue-955 text-base leading-none">Register Patient</h3>
+                  <span className="text-[10px] text-blue-600 font-bold tracking-wide uppercase">New Profile Document Entry</span>
                 </div>
               </div>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-955"><X size={20} /></button>
+              <button onClick={() => setIsModalOpen(false)} className="text-blue-900/60 hover:text-blue-955"><X size={20} /></button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Resident Full Name</label>
+                <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Resident Full Name</label>
                 <input
                   type="text"
                   name="name"
@@ -578,13 +577,13 @@ export default function PatientsPage() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="e.g. Maria Clara"
-                  className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
+                  className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Age</label>
+                  <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Age</label>
                   <input
                     type="text"
                     name="age"
@@ -594,17 +593,17 @@ export default function PatientsPage() {
                     value={formData.age}
                     onChange={handleChange}
                     placeholder="e.g. 28"
-                    className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
+                    className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Gender</label>
+                  <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Gender</label>
                   <select
                     name="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
+                    className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -614,7 +613,7 @@ export default function PatientsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Mobile Number (Max 11 Digits)</label>
+                <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Mobile Number (Max 11 Digits)</label>
                 <input
                   type="text"
                   name="contact"
@@ -623,22 +622,22 @@ export default function PatientsPage() {
                   value={formData.contact}
                   onChange={handleChange}
                   placeholder="e.g. 09171234567"
-                  className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
+                  className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                 />
               </div>
 
-              <div className="flex justify-end gap-x-3 pt-3 border-t border-slate-100">
+              <div className="flex justify-end gap-x-3 pt-3 border-t border-blue-50">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs px-5 py-3 rounded-2xl transition cursor-pointer"
+                  className="border border-blue-100 hover:bg-blue-50/50 text-blue-900 font-bold text-xs px-5 py-3 rounded-2xl transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-blue-900 hover:bg-blue-950 text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-md transition flex items-center justify-center gap-1.5 min-w-[150px]"
+                  className="bg-blue-900 hover:bg-blue-955 text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-md transition flex items-center justify-center gap-1.5 min-w-[150px]"
                 >
                   {isSubmitting ? <Loader2 size={15} className="animate-spin" /> : 'Confirm Registration'}
                 </button>
@@ -648,75 +647,75 @@ export default function PatientsPage() {
         </div>
       )}
 
-      {/* --- ADD CHECKUP HISTORY RECORD MODAL (WITH CHECKUP TYPE INPUT) --- */}
+      {/* --- ADD CHECKUP HISTORY RECORD MODAL --- */}
       {isHistoryModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-          <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl border border-slate-100 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+        <div className="fixed inset-0 bg-blue-955/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+          <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl border border-blue-100 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="p-6 border-b border-blue-50 flex justify-between items-center bg-blue-50/20">
               <div className="flex items-center gap-x-2.5">
                 <div className="bg-blue-100 p-2 rounded-xl text-blue-900"><ClipboardList size={20} /></div>
                 <div>
-                  <h3 className="font-black text-slate-955 text-base leading-none">Log Past Checkup</h3>
-                  <span className="text-[10px] text-slate-500 font-bold tracking-wide uppercase">Add Diagnostics Entry</span>
+                  <h3 className="font-black text-blue-955 text-base leading-none">Log Past Checkup</h3>
+                  <span className="text-[10px] text-blue-600 font-bold tracking-wide uppercase">Append Diagnostics History</span>
                 </div>
               </div>
-              <button onClick={() => setIsHistoryModalOpen(false)} className="text-slate-400 hover:text-slate-955"><X size={20} /></button>
+              <button onClick={() => setIsHistoryModalOpen(false)} className="text-blue-900/60 hover:text-blue-955"><X size={20} /></button>
             </div>
 
             <form onSubmit={handleAddHistory} className="p-6 space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Checkup Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={historyFormData.date}
-                    onChange={(e) => setHistoryFormData(prev => ({ ...prev, date: e.target.value }))}
-                    className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Type of Checkup</label>
-                  <select
-                    value={historyFormData.appointmentType}
-                    onChange={(e) => setHistoryFormData(prev => ({ ...prev, appointmentType: e.target.value }))}
-                    className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955"
-                  >
-                    <option value="General Consultation">General Consultation</option>
-                    <option value="Prenatal Program">Prenatal Program</option>
-                    <option value="Pediatric Immunization">Pediatric Immunization</option>
-                    <option value="Senior NCD Program">Senior NCD Program</option>
-                    <option value="Dental Checkup">Dental Checkup</option>
-                    <option value="Emergency Care">Emergency Care</option>
-                  </select>
-                </div>
-              </div>
-
               <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest pl-1 mb-2">Clinical Findings & Diagnosis</label>
-                <textarea
+                <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Checkup Consultation Date</label>
+                <input
+                  type="date"
+                  name="date"
                   required
-                  rows="4"
-                  value={historyFormData.findings}
-                  onChange={(e) => setHistoryFormData(prev => ({ ...prev, findings: e.target.value }))}
-                  placeholder="Describe dynamic diagnosis notes, treatment plans, and physical measurements..."
-                  className="w-full bg-slate-50 border border-slate-200 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-slate-955 resize-none leading-relaxed"
+                  value={historyFormData.date}
+                  onChange={(e) => setHistoryFormData(prev => ({ ...prev, date: e.target.value }))}
+                  className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
                 />
               </div>
 
-              <div className="flex justify-end gap-x-3 pt-3 border-t border-slate-100">
+              <div>
+                <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Availed Clinic Consultation Type</label>
+                <select
+                  name="appointmentType"
+                  value={historyFormData.appointmentType}
+                  onChange={(e) => setHistoryFormData(prev => ({ ...prev, appointmentType: e.target.value }))}
+                  className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955"
+                >
+                  <option value="General Consultation">General Consultation</option>
+                  <option value="Prenatal & Maternal Clinic">Prenatal & Maternal Clinic</option>
+                  <option value="Child Care & Immunization">Child Care & Immunization</option>
+                  <option value="Maternal & Lab Works">Maternal & Lab Works</option>
+                  <option value="NCD Care & Senior Wellness">NCD Care & Senior Wellness</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-blue-900 uppercase tracking-widest pl-1 mb-2">Clinical Findings & Notes</label>
+                <textarea
+                  name="findings"
+                  required
+                  rows={4}
+                  value={historyFormData.findings}
+                  onChange={(e) => setHistoryFormData(prev => ({ ...prev, findings: e.target.value }))}
+                  placeholder="Enter medical findings, parameters, prescriptions, or diagnosis details..."
+                  className="w-full bg-blue-50/30 border border-blue-100 px-4 py-3 rounded-2xl text-sm focus:outline-none focus:border-blue-900 focus:bg-white font-semibold text-blue-955 resize-none placeholder:text-blue-900/30"
+                />
+              </div>
+
+              <div className="flex justify-end gap-x-3 pt-3 border-t border-blue-50">
                 <button
                   type="button"
                   onClick={() => setIsHistoryModalOpen(false)}
-                  className="border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs px-5 py-3 rounded-2xl transition cursor-pointer"
+                  className="border border-blue-100 hover:bg-blue-50/50 text-blue-900 font-bold text-xs px-5 py-3 rounded-2xl transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-blue-900 hover:bg-blue-950 text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-md transition flex items-center justify-center gap-1.5 min-w-[150px]"
+                  className="bg-blue-900 hover:bg-blue-955 text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-md transition flex items-center justify-center gap-1.5 min-w-[150px]"
                 >
                   {isSubmitting ? <Loader2 size={15} className="animate-spin" /> : 'Save Record Entry'}
                 </button>
@@ -725,7 +724,6 @@ export default function PatientsPage() {
           </div>
         </div>
       )}
-
     </div>
   );
 }
