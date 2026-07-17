@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { 
   Users, 
   Calendar, 
-  CheckCircle, 
-  Clock, 
   Settings, 
   LogOut,
   Sliders,
@@ -25,14 +23,9 @@ export default function StaffDashboard({ onLogout }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('appointments');
   
-  // New Logout Animation States
+  // Logout Animation States
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [showLogoutToast, setShowLogoutToast] = useState(false);
-
-  // Stats calculations
-  const totalBooked = appointments.length;
-  const pendingCount = appointments.filter(a => a.status === 'Pending').length;
-  const approvedCount = appointments.filter(a => a.status === 'Approved').length;
 
   // Actions passed to the sub-page
   const handleStatusChange = (id, newStatus) => {
@@ -46,7 +39,6 @@ export default function StaffDashboard({ onLogout }) {
     setIsLoggingOut(true);
     setShowLogoutToast(true);
 
-    // 1.5 second delay to securely wipe session keys/simulated states
     setTimeout(() => {
       onLogout();
     }, 1500);
@@ -173,40 +165,6 @@ export default function StaffDashboard({ onLogout }) {
         {/* Dynamic Workspace Container */}
         <div className="flex-1 overflow-y-auto p-8 space-y-8">
           
-          {/* Stats Analytics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Bookings</p>
-                <p className="text-3xl font-black text-slate-955 mt-1">{totalBooked}</p>
-              </div>
-              <div className="bg-blue-50 p-3.5 rounded-2xl border border-blue-100">
-                <Calendar size={24} className="text-blue-900" />
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Pending Verification</p>
-                <p className="text-3xl font-black text-amber-600 mt-1">{pendingCount}</p>
-              </div>
-              <div className="bg-amber-50 p-3.5 rounded-2xl border border-amber-100">
-                <Clock size={24} className="text-amber-600" />
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
-              <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Confirmed Slots</p>
-                <p className="text-3xl font-black text-emerald-600 mt-1">{approvedCount}</p>
-              </div>
-              <div className="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-100">
-                <CheckCircle size={24} className="text-emerald-600" />
-              </div>
-            </div>
-          </div>
-
-          {/* Dynamic Render Switch */}
           {activeTab === 'appointments' && (
             <AppointmentsPage 
               appointments={appointments} 
