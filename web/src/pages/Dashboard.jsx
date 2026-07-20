@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 // Imports: Local Data
-import { INITIAL_APPOINTMENTS } from '../components/mockAppointments.js';
+import { INITIAL_APPOINTMENTS } from '../components/mockPatients.js';
 
 // Imports: Separated Pages
 import AppointmentsPage from './AppointmentsPage';
@@ -118,13 +118,6 @@ export default function StaffDashboard({ onLogout }) {
 
         <div className="p-4 border-t border-blue-900 space-y-1">
           <button 
-            disabled={isLoggingOut}
-            className="w-full flex items-center gap-x-3 px-4 py-3 rounded-xl text-sm font-semibold text-blue-300 hover:bg-blue-900/40 transition disabled:opacity-55"
-          >
-            <Settings size={18} />
-            Clinic Settings
-          </button>
-          <button 
             onClick={handleLogoutClick}
             disabled={isLoggingOut}
             className="w-full flex items-center gap-x-3 px-4 py-3 rounded-xl text-sm font-bold text-red-300 hover:bg-red-950/40 transition cursor-pointer disabled:opacity-60 disabled:pointer-events-none"
@@ -175,7 +168,7 @@ export default function StaffDashboard({ onLogout }) {
           )}
 
           {activeTab === 'patients' && (
-            <PatientsPage />
+            <PatientsPage appointments={appointments} />
           )}
 
           {activeTab === 'services' && (
