@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   ArrowLeft, Edit, User, Calendar, Phone, ShieldAlert, Plus, ClipboardList, 
   Loader2, X, Mail, MapPin, Briefcase, CreditCard, Heart, FileText, Clock, AlertCircle,
-  ExternalLink, Search
+  ExternalLink, Search, Trash2
 } from 'lucide-react';
 
 export default function PatientRecords({
@@ -11,6 +11,7 @@ export default function PatientRecords({
   onBack,
   onUpdatePatient,
   onAddHistoryRecord,
+  onDeleteHistoryRecord,
   isSubmitting,
   setIsSubmitting,
   triggerToast
@@ -247,6 +248,23 @@ export default function PatientRecords({
         setIsSubmitting(false);
       }
     }, 800);
+  };
+
+  const handleDeleteHistory = (recordId, recordDate) => {
+    const confirmed = window.confirm(`Remove this visit record from ${patient.name}'s history?`);
+    if (!confirmed) return;
+
+    setIsSubmitting(true);
+    setTimeout(() => {
+      try {
+        onDeleteHistoryRecord(patient.id, recordId);
+        triggerToast('delete', `Visit record for ${recordDate} was successfully removed.`);
+      } catch (err) {
+        triggerToast('error', 'Failed to remove medical history record.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    }, 600);
   };
 
   const getStatusBadge = (status) => {
@@ -634,6 +652,7 @@ export default function PatientRecords({
                         <th className="pb-2">Clinic</th>
                         <th className="pb-2">Illness / Condition</th>
                         <th className="pb-2">Remarks</th>
+                        <th className="pb-2 text-right">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-50">
@@ -644,11 +663,22 @@ export default function PatientRecords({
                             <td className="py-3 font-semibold text-slate-700">{record.appointmentType}</td>
                             <td className="py-3 font-semibold text-slate-700">{record.findings}</td>
                             <td className="py-3 font-semibold text-slate-700">{record.remarks || 'Regular check-up'}</td>
+                            <td className="py-3 text-right">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteHistory(record.id, record.date)}
+                                disabled={isSubmitting}
+                                className="text-slate-400 hover:text-rose-600 transition p-1.5 hover:bg-rose-50 rounded-lg cursor-pointer inline-flex items-center justify-center disabled:opacity-30 disabled:pointer-events-none"
+                                title="Remove record"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={4} className="py-6 text-center text-slate-400 italic">No visit history recorded.</td>
+                          <td colSpan={5} className="py-6 text-center text-slate-400 italic">No visit history recorded.</td>
                         </tr>
                       )}
                     </tbody>

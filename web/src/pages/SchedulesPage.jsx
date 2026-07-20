@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, Minus, Calendar as CalendarIcon, Layers, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Edit3, Calendar as CalendarIcon, Layers, ChevronLeft, ChevronRight } from 'lucide-react';
 
 // Externalized Data Configuration Import
 import { INITIAL_SERVICES } from '../components/mockServices.js';
@@ -167,6 +167,7 @@ function CustomDatePicker({ value, minDateStr, allowedDays, onChange }) {
 /* MAIN CLINIC SCHEDULES PAGE */
 export default function SchedulesPage() {
   const [services, setServices] = useState(INITIAL_SERVICES);
+  const [editingSlotServiceId, setEditingSlotServiceId] = useState(null);
   
   const getTodayString = () => {
     const today = new Date();
@@ -250,6 +251,42 @@ export default function SchedulesPage() {
     }));
   };
 
+  const handleSlotsInputChange = (serviceId, value) => {
+    const targetDate = selectedDates[serviceId];
+
+    if (value === '') {
+      setServices(prev => prev.map(s => {
+        if (s.id === serviceId) {
+          return {
+            ...s,
+            dateSlots: {
+              ...s.dateSlots,
+              [targetDate]: ''
+            }
+          };
+        }
+        return s;
+      }));
+      return;
+    }
+
+    const parsedValue = parseInt(value, 10);
+    const nextCapacity = Number.isNaN(parsedValue) ? 0 : Math.max(0, parsedValue);
+
+    setServices(prev => prev.map(s => {
+      if (s.id === serviceId) {
+        return {
+          ...s,
+          dateSlots: {
+            ...s.dateSlots,
+            [targetDate]: nextCapacity
+          }
+        };
+      }
+      return s;
+    }));
+  };
+
   return (
     <div className="bg-white rounded-3xl border border-blue-100 shadow-sm overflow-hidden">
       <div className="p-6 border-b border-blue-50 bg-blue-50/20 flex justify-between items-center">
@@ -266,7 +303,7 @@ export default function SchedulesPage() {
         {services.map(service => {
           const currentTargetDate = selectedDates[service.id];
           const displaySlots = service.dateSlots[currentTargetDate] !== undefined 
-            ? service.dateSlots[currentTargetDate] 
+            ? service.dateSlots[currentTargetDate]
             : service.defaultCapacity;
 
           // Compute string of selected days: "Mondays, Tuesdays" etc.
@@ -325,27 +362,39 @@ export default function SchedulesPage() {
                   onChange={(dateStr) => handleDateChange(service.id, dateStr)}
                 />
 
-                <div className="flex flex-col items-center border border-blue-100 p-2 rounded-2xl bg-blue-50/10 min-w-[130px]">
+                <div className="flex flex-col items-center min-w-[150px]">
                   <span className="text-[10px] font-black tracking-widest text-blue-600 uppercase mb-1.5 text-center">
                     Slots on {currentTargetDate === getTodayString() ? 'Today' : currentTargetDate}
                   </span>
-                  <div className="flex items-center gap-x-2.5">
-                    <button 
+                  <div className="flex items-center gap-2 w-full justify-center">
+                    {editingSlotServiceId === service.id ? (
+                      <input
+                        type="number"
+                        min="0"
+                        inputMode="numeric"
+                        autoFocus
+                        value={displaySlots}
+                        onChange={(e) => handleSlotsInputChange(service.id, e.target.value)}
+                        onBlur={() => setEditingSlotServiceId(null)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            e.currentTarget.blur();
+                          }
+                        }}
+                        className="w-14 h-9 rounded-lg border border-blue-200 bg-white px-2 text-center text-sm font-black text-blue-950 shadow-sm outline-none ring-0 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      />
+                    ) : (
+                      <span className="w-14 h-9 rounded-lg border border-blue-200 bg-blue-50/50 px-2 flex items-center justify-center text-sm font-black text-blue-950 shadow-sm">
+                        {displaySlots === '' ? '—' : displaySlots}
+                      </span>
+                    )}
+                    <button
                       type="button"
-                      onClick={() => handleUpdateSlots(service.id, -1)}
-                      className="p-1 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 active:scale-95 cursor-pointer shadow-sm"
+                      onClick={() => setEditingSlotServiceId(service.id)}
+                      className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 active:scale-95 cursor-pointer shadow-sm"
                     >
-                      <Minus size={13} />
-                    </button>
-                    <span className="w-8 text-center text-sm font-black text-blue-950">
-                      {displaySlots}
-                    </span>
-                    <button 
-                      type="button"
-                      onClick={() => handleUpdateSlots(service.id, 1)}
-                      className="p-1 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 active:scale-95 cursor-pointer shadow-sm"
-                    >
-                      <Plus size={13} />
+                      <Edit3 size={13} />
                     </button>
                   </div>
                 </div>

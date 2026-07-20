@@ -118,6 +118,20 @@ export default function PatientsPage({ appointments = [] }) {
     }));
   };
 
+  const handleDeleteHistoryFromRecords = (patientId, recordId) => {
+    setPatients(prev => prev.map(p => {
+      if (p.id === patientId) {
+        return { ...p, history: (p.history || []).filter(record => record.id !== recordId) };
+      }
+      return p;
+    }));
+
+    setSelectedPatient(prev => prev && prev.id === patientId ? {
+      ...prev,
+      history: (prev.history || []).filter(record => record.id !== recordId)
+    } : prev);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -225,6 +239,7 @@ export default function PatientsPage({ appointments = [] }) {
           onBack={() => setSelectedPatient(null)}
           onUpdatePatient={handleUpdatePatientFromRecords}
           onAddHistoryRecord={handleAddHistoryFromRecords}
+          onDeleteHistoryRecord={handleDeleteHistoryFromRecords}
           isSubmitting={isSubmitting}
           setIsSubmitting={setIsSubmitting}
           triggerToast={triggerToast}
