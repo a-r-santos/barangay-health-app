@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, ScrollView, StatusBar, Keyboard, Platform } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, ScrollView, StatusBar, Keyboard, Platform, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MOCK_PATIENTS } from '../constants/mockPatients';
@@ -8,6 +8,7 @@ export default function LookupScreen({ onGoBack }) {
   const [searchId, setSearchId] = useState('');
   const [patientData, setPatientData] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
 
   const insets = useSafeAreaInsets();
   const statusBarHeight = Platform.OS === 'android' 
@@ -16,13 +17,22 @@ export default function LookupScreen({ onGoBack }) {
 
   const handleLookup = () => {
     Keyboard.dismiss();
+    if (!searchId.trim()) return;
+
+    setIsSearching(true);
+    setHasSearched(false);
+
     const cleanId = searchId.trim().toUpperCase();
-    if (MOCK_PATIENTS[cleanId]) {
-      setPatientData(MOCK_PATIENTS[cleanId]);
-    } else {
-      setPatientData(null);
-    }
-    setHasSearched(true);
+
+    setTimeout(() => {
+      if (MOCK_PATIENTS[cleanId]) {
+        setPatientData(MOCK_PATIENTS[cleanId]);
+      } else {
+        setPatientData(null);
+      }
+      setHasSearched(true);
+      setIsSearching(false);
+    }, 700);
   };
 
   return (
@@ -63,13 +73,26 @@ export default function LookupScreen({ onGoBack }) {
             <TouchableOpacity 
               className="bg-blue-900 px-5 rounded-xl justify-center items-center active:bg-blue-800"
               onPress={handleLookup}
+              disabled={isSearching}
+              style={{ opacity: isSearching ? 0.7 : 1 }}
             >
-              <MaterialCommunityIcons name="magnify" size={24} color="white" />
+              {isSearching ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <MaterialCommunityIcons name="magnify" size={24} color="white" />
+              )}
             </TouchableOpacity>
           </View>
-          <Text className="text-xs text-blue-600/70 mt-2 font-medium">
-            Tip: Type "PT-101" or "PT-102" to test clinical status tracking.
-          </Text>
+          {isSearching ? (
+            <View className="mt-3 flex-row items-center justify-center py-2 rounded-xl bg-blue-50 border border-blue-100">
+              <ActivityIndicator size="small" color="#1d4ed8" />
+              <Text className="ml-2 text-sm font-bold text-blue-900">Searching patient record...</Text>
+            </View>
+          ) : (
+            <Text className="text-xs text-blue-600/70 mt-2 font-medium">
+              Tip: Type "PT-101" or "PT-102" to test clinical status tracking.
+            </Text>
+          )}
         </View>
 
         {hasSearched && (

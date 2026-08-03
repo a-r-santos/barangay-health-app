@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity, ScrollView, StatusBar, Modal, Alert, Keyboard, Platform } from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, ScrollView, StatusBar, Modal, Alert, Keyboard, Platform, ActivityIndicator } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { MOCK_PATIENTS } from '../constants/mockPatients';
@@ -23,6 +23,10 @@ export default function BookingScreen({ onGoBack }) {
   const [step, setStep] = useState('calendar'); 
   const [patientIdInput, setPatientIdInput] = useState('');
   const [showFastPicker, setShowFastPicker] = useState(false);
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [confirmationSummary, setConfirmationSummary] = useState(null);
+  const [isPreparingConfirmation, setIsPreparingConfirmation] = useState(false);
 
   const monthsList = [
     "January", "February", "March", "April", "May", "June",
@@ -172,33 +176,45 @@ export default function BookingScreen({ onGoBack }) {
     const remaining = getRemainingSlots(selectedService, currentYear, currentMonth, selectedDate);
     const slotNumber = 11 - remaining;
 
-    Alert.alert(
-      "Confirm Reservation",
-      `Book slot #${slotNumber} on ${monthsList[currentMonth]} ${selectedDate}, ${currentYear} at ${selectedTime} for: ${patientName}?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        { 
-          text: "Confirm & Book", 
-          onPress: () => {
-            if (selectedService) {
-              if (!selectedService.bookings) selectedService.bookings = {};
-              if (!selectedService.bookings[currentYear]) selectedService.bookings[currentYear] = {};
-              if (!selectedService.bookings[currentYear][currentMonth]) selectedService.bookings[currentYear][currentMonth] = {};
-              if (!selectedService.bookings[currentYear][currentMonth][selectedDate]) {
-                selectedService.bookings[currentYear][currentMonth][selectedDate] = 0;
-              }
-              selectedService.bookings[currentYear][currentMonth][selectedDate] += 1;
-            }
+    setIsPreparingConfirmation(true);
+    setShowConfirmationDialog(false);
+    setConfirmationSummary({
+      patientName,
+      slotNumber,
+      serviceName: selectedService.name,
+      dateLabel: `${monthsList[currentMonth]} ${selectedDate}, ${currentYear}`,
+      time: selectedTime,
+    });
 
-            setShowCalendar(false);
-            Alert.alert(
-              "Reservation Confirmed!", 
-              `Successfully booked for ${patientName} on ${monthsList[currentMonth]} ${selectedDate} at ${selectedTime}.`
-            );
-          } 
-        }
-      ]
-    );
+    setTimeout(() => {
+      setIsPreparingConfirmation(false);
+      setShowConfirmationDialog(true);
+    }, 1000);
+  };
+
+  const finalizeReservation = () => {
+    const patientName = confirmationSummary?.patientName;
+    const dateLabel = confirmationSummary?.dateLabel;
+    const time = confirmationSummary?.time;
+
+    if (selectedService) {
+      if (!selectedService.bookings) selectedService.bookings = {};
+      if (!selectedService.bookings[currentYear]) selectedService.bookings[currentYear] = {};
+      if (!selectedService.bookings[currentYear][currentMonth]) selectedService.bookings[currentYear][currentMonth] = {};
+      if (!selectedService.bookings[currentYear][currentMonth][selectedDate]) {
+        selectedService.bookings[currentYear][currentMonth][selectedDate] = 0;
+      }
+      selectedService.bookings[currentYear][currentMonth][selectedDate] += 1;
+    }
+
+    setShowConfirmationDialog(false);
+    setShowCalendar(false);
+    setShowSuccessDialog(true);
+    setConfirmationSummary({
+      patientName,
+      dateLabel,
+      time,
+    });
   };
 
   return (
@@ -493,6 +509,105 @@ export default function BookingScreen({ onGoBack }) {
           </View>
         </Modal>
       )}
+
+      <Modal
+        visible={isPreparingConfirmation}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setIsPreparingConfirmation(false)}
+      >
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(15, 23, 42, 0.35)', paddingHorizontal: 24 }}>
+          <View className="bg-white px-6 py-5 rounded-2xl items-center shadow-xl border border-blue-100" style={{ width: '100%', maxWidth: 280 }}>
+            <ActivityIndicator size="large" color="#1d4ed8" />
+            <Text className="mt-3 text-base font-black text-blue-900 text-center">Preparing reservation...</Text>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Confirmation Modal */}
+      <Modal
+        visible={showConfirmationDialog}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowConfirmationDialog(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/45 px-5">
+          <View className="bg-white rounded-[30px] p-6 w-full shadow-2xl border border-blue-100">
+            <View className="items-center mb-5">
+              <View className="bg-amber-100 w-16 h-16 rounded-full items-center justify-center mb-3">
+                <MaterialCommunityIcons name="calendar-check" size={28} color="#1d4ed8" />
+              </View>
+              <Text className="text-xl font-black text-blue-950 text-center">Confirm Reservation</Text>
+            </View>
+
+            <View className="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-5">
+              <Text className="text-xs font-black uppercase tracking-widest text-blue-600">Appointment Summary</Text>
+              <Text className="mt-2 text-base font-extrabold text-blue-950">
+                {confirmationSummary?.serviceName}
+              </Text>
+              <Text className="mt-1 text-sm font-semibold text-blue-700">
+                {confirmationSummary?.patientName}
+              </Text>
+              <Text className="mt-2 text-sm text-blue-800 font-semibold">
+                Slot #{confirmationSummary?.slotNumber} • {confirmationSummary?.dateLabel} • {confirmationSummary?.time}
+              </Text>
+            </View>
+
+            <Text className="text-sm text-blue-700 leading-6 text-center px-2 mb-5">
+              Please confirm this booking to reserve the selected slot for the patient.
+            </Text>
+
+            <View className="flex-row gap-x-3">
+              <TouchableOpacity
+                onPress={() => setShowConfirmationDialog(false)}
+                className="flex-1 py-3.5 border border-blue-200 rounded-2xl items-center"
+              >
+                <Text className="text-blue-700 font-bold text-base">Cancel</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={finalizeReservation}
+                className="flex-1 py-3.5 bg-emerald-600 rounded-2xl items-center shadow-md"
+              >
+                <Text className="text-white font-black text-base">Confirm & Book</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Success Modal */}
+      <Modal
+        visible={showSuccessDialog}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => setShowSuccessDialog(false)}
+      >
+        <View className="flex-1 justify-center items-center bg-black/45 px-5">
+          <View className="bg-white rounded-[30px] p-6 w-full shadow-2xl border border-emerald-100">
+            <View className="items-center mb-4">
+              <View className="bg-emerald-100 w-16 h-16 rounded-full items-center justify-center mb-3">
+                <MaterialCommunityIcons name="check-circle" size={30} color="#059669" />
+              </View>
+              <Text className="text-2xl font-black text-emerald-700">Booked!</Text>
+            </View>
+
+            <Text className="text-center text-blue-950 font-bold text-base leading-7">
+              Reservation confirmed for {confirmationSummary?.patientName}
+            </Text>
+            <Text className="mt-2 text-center text-sm text-blue-700 font-semibold">
+              {confirmationSummary?.dateLabel} at {confirmationSummary?.time}
+            </Text>
+
+            <TouchableOpacity
+              onPress={() => setShowSuccessDialog(false)}
+              className="mt-6 py-3.5 bg-emerald-600 rounded-2xl items-center"
+            >
+              <Text className="text-white font-black text-base">Done</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Fast Selection Dropdown */}
       <Modal

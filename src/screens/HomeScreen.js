@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, StatusBar } from 'react-native';
+import { Text, View, TouchableOpacity, StatusBar, Image } from 'react-native';
 // 1. Import the Hook to handle physical notches and home indicator bars safely
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -26,12 +26,10 @@ export default function HomeScreen({ onNavigate }) {
         
         {/* Main Welcome Hero Card with Blue Background */}
         <View className="bg-blue-900 p-7 rounded-3xl shadow-md shadow-blue-900/20 border border-blue-950/20 w-full items-center mb-8">
-          <View className="bg-white/10 p-4 rounded-2xl mb-4">
-            <MaterialCommunityIcons name="hospital-building" size={40} color="#ffffff" />
-          </View>
-          <Text className="text-2xl font-black text-white text-center tracking-tight">
-            Barangay Health Center
-          </Text>
+          <Image
+            source={require('../../assets/logo-with-text.png')}
+            style={{ width: 250, height: 250, resizeMode: 'contain', marginBottom: 12 }}
+          />
           <Text className="text-blue-100/80 mt-2 text-center text-sm font-medium leading-relaxed px-2">
             Welcome to your digital patient gateway. Easily book consultations or check schedule statuses.
           </Text>

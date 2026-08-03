@@ -34,7 +34,7 @@ export default function HelpDeskScreen({ onGoBack }) {
       <ScrollView className="flex-1 px-4 py-6" showsVerticalScrollIndicator={false}>
         <View className="items-center mb-6">
           <Text className="text-xl font-black text-blue-950">Barangay Health Center</Text>
-          <Text className="text-blue-600 font-semibold mt-1 text-sm tracking-wide">Show Medical Schedule</Text>
+          <Text className="text-blue-600 font-semibold mt-1 text-sm tracking-wide">Medical Schedule</Text>
         </View>
 
         {/* Schedule Cards */}
