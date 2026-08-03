@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Lock, User, Database, ShieldAlert, Loader2, CheckCircle2, X } from 'lucide-react';
+import logoWithText from '../../../assets/logo-with-text.png';
+import { Lock, User, ShieldAlert, Loader2, CheckCircle2, X } from 'lucide-react';
 
 const ADMIN_CREDENTIALS = {
   username: 'admin',
@@ -93,12 +94,14 @@ export default function Login({ onLoginSuccess }) {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center mb-4">
-          <div className="bg-blue-900 p-3.5 rounded-2xl shadow-md border border-blue-950/30">
-            <Database size={32} className="text-white" />
-          </div>
+          <img
+            src={logoWithText}
+            alt="BHC Portal logo"
+            className="h-[250px] w-[250px] object-contain"
+          />
         </div>
         <h2 className="text-center text-3xl font-black text-slate-900 tracking-tight">
-          BHC Admin Portal
+          Admin Portal
         </h2>
         <p className="mt-2 text-center text-sm font-semibold text-slate-500 uppercase tracking-widest">
           Barangay Health Center Operations

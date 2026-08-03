@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import logo from '../../../assets/logo.png';
 import { 
   Users, 
   Calendar, 
   Settings, 
   LogOut,
   Sliders,
-  Database,
   Loader2,
   X
 } from 'lucide-react';
@@ -72,11 +72,13 @@ export default function StaffDashboard({ onLogout }) {
       {/* 1. Sidebar Navigation */}
       <aside className="w-64 bg-blue-950 text-white flex flex-col justify-between border-r border-blue-900 shrink-0">
         <div>
-          <div className="p-6 border-b border-blue-900 flex items-center gap-x-3">
-            <div className="bg-blue-800 p-2 rounded-xl">
-              <Database size={24} className="text-white" />
-            </div>
-            <div>
+          <div className="px-2 pt-2 pb-4 border-b border-blue-900 flex items-center justify-start gap-x-2">
+            <img
+              src={logo}
+              alt="BHC Portal logo"
+              className="h-[110px] w-[110px] object-contain shrink-0"
+            />
+            <div className="text-left leading-tight">
               <h1 className="font-black text-sm tracking-wide uppercase">BHC Portal</h1>
               <span className="text-[10px] text-blue-300 font-bold uppercase tracking-widest">Admin Desk</span>
             </div>
